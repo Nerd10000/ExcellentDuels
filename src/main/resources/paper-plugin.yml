@@ -1,0 +1,6 @@
+name: ExcellentDuels
+version: '1.0'
+main: dragon.me.excellentDuels.ExcellentDuels
+description: A lightweight async modern duels plugin.
+api-version: '1.21.11'
+bootstrapper: dragon.me.excellentDuels.PaperPluginBootstrapper

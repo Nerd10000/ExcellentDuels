@@ -1,0 +1,91 @@
+# In seconds
+invite_expire_time: 120
+
+messages:
+  prefix: "⏵<yellow><u>ExcellentDuels</u> </yellow>»"
+
+  incorrect_usage: "%prefix% <red>Too much or not enough arguments provided!</red>"
+  player_is_offline: "%prefix% <red>Player is not online!</red>"
+  self_error: "%prefix% <red>You can't choose yourself!</red>"
+
+  invite_expired: "%prefix% <yellow>The invite for the duel from <gold>%player1%</gold> has expired!</yellow>"
+  invitation: "%prefix% <yellow>You have been invited to a duel by <gold>%player1%</gold> using <gold>%kit%</gold>! <b><green><u><i><click:run_command:'/acceptduel %player1%'>ACCEPT HERE</click></i></u></green></b></yellow>"
+  invitation_confirmation: "%prefix% <yellow>You have sent the duel request to <gold>%player2%</gold>.</yellow>"
+
+  kit_created: "%prefix% <yellow>The kit named <gold>%kit%</gold> has been saved.</yellow>"
+  no_such_kit: "%prefix% <red>There is no such kit!</red>"
+
+  duel_accept: "%prefix% <yellow><gold>%player2%</gold> has accepted the duel... It will begin shortly!</yellow>"
+
+  # ===== ARENAS =====
+
+  duel_arena_created: "%prefix% <yellow>You've created the arena <gold>%arena%</gold>! <click:run_command:'/arena corner1 %arena%'><green><i><u>Click here to set the 1st corner</u></i></green></click></yellow>"
+
+  no_such_arena: "%prefix% <red>There is no such arena!</red>"
+
+  1st_corner_set: "%prefix% <yellow>1st corner set for <gold>%arena%</gold>! <click:run_command:'/arena corner2 %arena%'><green><i><u>Click here to set the 2nd corner</u></i></green></click></yellow>"
+
+  2nd_corner_set: "%prefix% <yellow>2nd corner set for <gold>%arena%</gold>! <click:run_command:'/arena spawn1 %arena%'><green><i><u>Click here to set the 1st spawn</u></i></green></click></yellow>"
+
+  1st_spawn_set: "%prefix% <yellow>1st spawn set for <gold>%arena%</gold>! <click:run_command:'/arena spawn2 %arena%'><green><i><u>Click here to set the 2nd spawn</u></i></green></click></yellow>"
+
+  2nd_spawn_set: "%prefix% <yellow>2nd spawn set for <gold>%arena%</gold>! <green><i><u>Arena setup complete!</u></i></green></yellow>"
+
+  arena_removed: "%prefix% <yellow>The arena <gold>%arena%</gold> has been removed.</yellow>"
+
+  arena_icon_set: "%prefix% <yellow>Icon set for arena <gold>%arena%</gold>.</yellow>"
+
+  kit_added_to_arena: "%prefix% <yellow>Kit <gold>%kit%</gold> added to arena <gold>%arena%</gold>.</yellow>"
+  kit_removed_from_arena: "%prefix% <yellow>Kit <gold>%kit%</gold> removed from arena <gold>%arena%</gold>.</yellow>"
+  spawn_has_been_set: "%prefix% <yellow>You have set the spawn for the duels! <gold>%location%</gold></yellow>"
+  # ====== Misc ======
+
+  death_title: "<red>ᴅᴇᴀᴛʜ"
+  death_subtitle: "<grey>You died! You are now spectating..."
+
+  victory_title: "<gold>ᴠɪᴄᴛᴏʀʏ"
+  victory_subtitle: "<grey>You've slayed him like a champion!"
+
+  duel_victory: "%prefix% <grey>You have won the duel against <yellow>%loser%</yellow><grey>!"
+  duel_defeat: "%prefix% <red>You lost the duel against <yellow>%winner%</yellow>!</red>"
+
+  blacklisted_commands_while_in_match: "%prefix% <red>You can't execute that command while in a match!"
+  # ===== Countdown =====
+  countdown_subtitle: "<grey>Prepare for the fight!"
+
+  countdown:
+    5: "<yellow>5"
+    4: "<yellow>4"
+    3: "<yellow>3"
+    2: "<yellow>2"
+    1: "<yellow>1"
+    go: "<gold>ɢᴏ!"
+
+    # The default value for the countdown format!
+    default: "<yellow>%number%"
+
+# Delays
+delays:
+  # The delay between the end of the duel and the players being teleported to spawn.
+  duel_end: 120
+  # The delay between the numbers that are shown to the player
+  countdown: 60
+
+# The commands that are allowed to be executed in a match use [] to disable this feature -> blocks all commands
+whitelisted_commands:
+  - "/w"
+  - "/msg"
+  - "/minecraft:w"
+  # "..."
+
+
+#Commands that will be executed once the duel ends!
+# Recommended to use Fast Arena Regen as the plugin has no built-in support for arena regen yet!
+duel_end_commands: []
+
+# Commands that will be executed once the duel starts
+duel_start_commands: []
+
+spawn_location:
+
+
