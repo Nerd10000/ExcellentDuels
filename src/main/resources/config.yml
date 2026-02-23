@@ -49,6 +49,9 @@ messages:
   duel_victory: "%prefix% <grey>You have won the duel against <yellow>%loser%</yellow><grey>!"
   duel_defeat: "%prefix% <red>You lost the duel against <yellow>%winner%</yellow>!</red>"
 
+  cancelled_title: "<red>ᴍᴀᴛᴄʜ ᴄᴀɴᴄᴇʟʟᴇᴅ!"
+  cancelled_subtitle: "<grey>Looks like your opponent left the game!
+  "
   blacklisted_commands_while_in_match: "%prefix% <red>You can't execute that command while in a match!"
   # ===== Countdown =====
   countdown_subtitle: "<grey>Prepare for the fight!"
@@ -64,12 +67,34 @@ messages:
     # The default value for the countdown format!
     default: "<yellow>%number%"
 
+    # ======= Help =======
+
+  help:
+      - "<gold>%prefix% Help:"
+      - ""
+      - "<yellow><underlined>Arenas</underlined><reset> <gold>Help:"
+      - " <white>- <yellow>/exarenas create <white><name> <gray>Creates the arena with the name of <name>."
+      - " <white>- <yellow>/exarenas corner1|corner2 <white><arena name> <gray>Sets the 1st or 2nd corner of the arena named <arena name>."
+      - " <white>- <yellow>/exarenas spawn1|spawn2 <white><arena name> <gray>Sets the 1st and 2nd spawn location for the arena with the name of <arena name>."
+      - " <white>- <yellow>/exarenas addkit <white><arena> <kit> <gray>Connects the kit to the arena."
+      - " <white>- <yellow>/exarenas removekit <white><name> <kit> <gray>Remove the connection between the arena and the kit."
+      - ""
+      - "<yellow><underlined>Kit</underlined><reset> <gold>Help:"
+      - " <white>- <yellow>/exkits create <white><name> <gray>Creates a kit with the name of <name>."
+      - " <white>- <yellow>/exkits give <white><kit name> <gray>Gives you the kit."
+      - ""
+      - "<yellow><underlined>Duels</underlined><reset> <gold>Help:"
+      - " <white>- <yellow>/exduels setspawn <gray>Sets the lobby/spawn location where the players will be teleported to once the duel ends."
+      - " <white>- <yellow>/exduels info <gray>Shows information about the plugin..."
+      - " <white>- <yellow>/exduels reload <gray>Reloads the plugin"
+      - ""
 # Delays
 delays:
   # The delay between the end of the duel and the players being teleported to spawn.
-  duel_end: 120
+  duel_end: 5
   # The delay between the numbers that are shown to the player
   countdown: 60
+
 
 # The commands that are allowed to be executed in a match use [] to disable this feature -> blocks all commands
 whitelisted_commands:

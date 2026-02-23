@@ -86,9 +86,13 @@ public class PlayerDeathListener implements Listener {
 
             loser.setGameMode(GameMode.SURVIVAL);
             winner.setGameMode(GameMode.SURVIVAL);
+            if (ConfigProvider.SPAWN_LOCATION == null){
+                ExcellentDuels.getPlugin().getLogger().warning("HEY! It looks like you forgot to set the spawn location! Please set it via \033[38;5;220m/exduels setspawn\u001B[0m in game.");
+            }else {
+                loser.teleport(ConfigProvider.SPAWN_LOCATION);
+                winner.teleport(ConfigProvider.SPAWN_LOCATION);
 
-            loser.teleport(ConfigProvider.SPAWN_LOCATION);
-            winner.teleport(ConfigProvider.SPAWN_LOCATION);
+            }
 
             loser.getInventory().setContents(InventoryController.inventoryMap.get(loser.getUniqueId()));
             winner.getInventory().setContents(InventoryController.inventoryMap.get(winner.getUniqueId()));

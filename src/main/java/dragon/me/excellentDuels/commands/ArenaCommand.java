@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public class ArenaCommand implements BasicCommand {
 
@@ -25,54 +26,38 @@ public class ArenaCommand implements BasicCommand {
     public @NotNull Collection<String> suggest(@NotNull CommandSourceStack stack, @NotNull String[] args) {
         if (!(stack.getSender() instanceof Player)) return List.of();
 
-        // All subcommands
-        String[] subcommands = {
-                "create", "corner1", "corner2",
-                "spawn1", "spawn2", "seticon",
-                "addkit", "removekit", "remove"
-        };
+        if (args.length < 1 && args.length != 1){
+            return  List.of("create", "corner1", "corner2","spawn1", "spawn2", "seticon","addkit","removekit");
+        }
+        if (args.length < 2 && args[0].equalsIgnoreCase("create")) {
+            return List.of("<name>");
+        }else if (args.length < 2 && (args[0].equalsIgnoreCase("spawn1") || args[0].equalsIgnoreCase("spawn2"))){
+            return  ArenaController.arenaList.values().stream().map(arena -> arena.getName()).toList();
 
-        // === FIRST ARGUMENT ===
-        if (args.length == 0 || args.length == 1) {
-            String partial = args.length == 0 ? "" : args[0].toLowerCase();
-            return java.util.Arrays.stream(subcommands)
-                    .filter(cmd -> cmd.toLowerCase().startsWith(partial))
-                    .sorted()
-                    .toList();
+        }else if (args.length < 2 && (args[0].equalsIgnoreCase("corner1") || args[0].equalsIgnoreCase("corner2"))){
+            return  ArenaController.arenaList.values().stream().map(arena -> arena.getName()).toList();
+        }
+        else if (args.length < 2 && (args[0].equalsIgnoreCase("seticon"))){
+            return  ArenaController.arenaList.values().stream().map(arena -> arena.getName()).toList();
         }
 
-        // === SECOND ARGUMENT ===
-        if (args.length >= 2) {
-            String firstArg = args[0].toLowerCase();
-            String partialSecond = args[1].toLowerCase();
-
-            switch (firstArg) {
-                case "create": // no suggestions for new arena name
-                    return List.of();
-
-                case "corner1":
-                case "corner2":
-                case "spawn1":
-                case "spawn2":
-                case "seticon":
-                case "remove": // suggest arena names
-                    return ArenaController.arenaList.keySet().stream()
-                            .filter(name -> name.toLowerCase().startsWith(partialSecond))
-                            .sorted()
-                            .toList();
-
-                case "addkit":
-                case "removekit": // suggest kit names
-                    return ExcellentDuels.getKitDataController().getAllKits().stream()
-                            .map(kit -> kit.getName())
-                            .filter(name -> name.toLowerCase().startsWith(partialSecond))
-                            .sorted()
-                            .toList();
-
-                default:
-                    return List.of();
-            }
+        else if (args.length < 2 && (args[0].equalsIgnoreCase("addkit"))){
+            return  ArenaController.arenaList.values().stream().map(arena -> arena.getName()).toList();
         }
+        else if (args.length < 3  && (args[0].equalsIgnoreCase("addkit"))){
+            return  ExcellentDuels.getKitDataController().getAllKits().stream().map(KitDataController.Kit::getName).toList();
+        }
+
+        else if (args.length < 2 && (args[0].equalsIgnoreCase("removekit"))){
+            return  ArenaController.arenaList.values().stream().map(arena -> arena.getName()).toList();
+        }
+        else if (args.length < 3  && (args[0].equalsIgnoreCase("removekit"))){
+            Optional<ArenaController.Arena> arenaOptional = ArenaController.arenaList.values().stream().filter(arena -> arena.getName().equalsIgnoreCase(args[1])).findFirst();
+            if (arenaOptional.isEmpty()) return  List.of();
+            return  arenaOptional.get().getAvailableKits().stream().map(kit -> kit.getName()).toList();
+        }
+
+
 
         return List.of(); // fallback
     }

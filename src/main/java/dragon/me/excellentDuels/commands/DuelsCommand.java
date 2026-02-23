@@ -35,12 +35,22 @@ public class DuelsCommand implements BasicCommand {
                 new ConfigProvider().reload();
                 player.sendRichMessage(ConfigProvider.SPAWN_HAS_BEEN_SET.replace("%location%","X: " + player.getLocation().x()
                 + " Y: " + player.getLocation().y() + " Z: " + player.getLocation().z()+ " YAW: " + player.getLocation().getYaw() + " PITCH: " + player.getLocation().getPitch()));
+                break;
+            case "help":
+                for (String line : ConfigProvider.HELP_MESSAGE){
+                    player.sendRichMessage(line);
+                }
+                break;
 
         }
     }
 
     @Override
     public @NotNull Collection<String> suggest(@NotNull CommandSourceStack commandSourceStack, @NotNull String[] args) {
+        if (args.length < 1){
+            return  List.of("setspawn","reload","info","help");
+        }
+
         return List.of();
     }
 

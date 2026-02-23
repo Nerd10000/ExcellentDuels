@@ -3,6 +3,7 @@ package dragon.me.excellentDuels.utils;
 import dragon.me.excellentDuels.ExcellentDuels;
 import org.bukkit.Location;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigProvider {
@@ -46,7 +47,11 @@ public class ConfigProvider {
     public static List<String> WHITELISTED_COMMANDS;
     public static List<String> DUEL_START_COMMANDS;
     public static List<String> DUEL_END_COMMANDS;
+    public static List<String> HELP_MESSAGE;
     public static Location SPAWN_LOCATION;
+
+    public static  String CANCELLED_TITLE;
+    public static  String CANCELLED_SUBTITLE;
     public void onInit() {
         var config = ExcellentDuels.getPlugin().getConfig();
 
@@ -107,6 +112,16 @@ public class ConfigProvider {
         DUEL_START_COMMANDS = config.getStringList("duel_start_commands");
 
         DUEL_END_COMMANDS = config.getStringList("duel_end_commands");
+
+        List<String> formattedHelp = new ArrayList<>();
+        for (String line : config.getStringList("messages.help")){
+            line = line.replace("%prefix%",PREFIX);
+            formattedHelp.add(line);
+        }
+        HELP_MESSAGE = formattedHelp;
+
+        CANCELLED_TITLE = config.getString("messages.cancelled_title");
+        CANCELLED_SUBTITLE = config.getString("messages.cancelled_subtitle");
     }
 
     public void reload() {
