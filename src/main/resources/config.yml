@@ -46,8 +46,9 @@ messages:
   victory_title: "<gold>ᴠɪᴄᴛᴏʀʏ"
   victory_subtitle: "<grey>You've slayed him like a champion!"
 
-  duel_victory: "%prefix% <grey>You have won the duel against <yellow>%loser%</yellow><grey>!"
-  duel_defeat: "%prefix% <red>You lost the duel against <yellow>%winner%</yellow>!</red>"
+  duel_victory: "%prefix% <grey>You have won the duel against <yellow>%winner_team%</yellow><grey>!"
+  duel_defeat: "%prefix% <red>You lost the duel against <yellow>%winner_tean%</yellow>!</red>"
+  player_eliminated: "%prefix% <gold>%player%</gold> has been eliminated!"
 
   cancelled_title: "<red>ᴍᴀᴛᴄʜ ᴄᴀɴᴄᴇʟʟᴇᴅ!"
   cancelled_subtitle: "<grey>Looks like your opponent left the game!

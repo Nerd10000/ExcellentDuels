@@ -11,10 +11,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 @Getter
 public class ArenaController {
     public static final Map<String,Arena>  arenaList = new HashMap<>();
@@ -50,17 +48,15 @@ public class ArenaController {
         Location corner1;
         Location corner2;
 
-        Location spawnPos1;
-        Location spawnPos2;
+        List<Location> spawnPositions;
 
-        public Arena(String name, List<KitDataController.Kit> availableKits, ItemStack arenaIcon, Location corner1, Location corner2, Location spawnPos1, Location spawnPos2) {
+        public Arena(String name, List<KitDataController.Kit> availableKits, ItemStack arenaIcon, Location corner1, Location corner2, List<Location> spawnPositions) {
             this.name = name;
             this.availableKits = (availableKits != null) ? new ArrayList<>(availableKits) : new ArrayList<>();
             this.arenaIcon = arenaIcon;
             this.corner1 = corner1;
             this.corner2 = corner2;
-            this.spawnPos1 = spawnPos1;
-            this.spawnPos2 = spawnPos2;
+            this.spawnPositions = spawnPositions;
         }
     }
     private void loadArena() {
@@ -73,11 +69,22 @@ public class ArenaController {
 
             Location corner1 = config.getLocation(path + ".corner1");
             Location corner2 = config.getLocation(path + ".corner2");
-            Location spawn1 = config.getLocation(path + ".spawn1");
-            Location spawn2 = config.getLocation(path + ".spawn2");
             ItemStack icon = config.getItemStack(path + ".icon");
 
-            // Load kits safely as names
+            List<Location> spawnPositions = new ArrayList<>();
+            if (config.isList(path + ".spawn_positions")) {
+                spawnPositions.addAll((Collection<? extends Location>) config.getList(path + ".spawn_positions", new ArrayList<Location>()));
+            } else {
+                Location spawn1 = config.getLocation(path + ".spawn1");
+                Location spawn2 = config.getLocation(path + ".spawn2");
+                if (spawn1 != null) {
+                    spawnPositions.add(spawn1);
+                }
+                if (spawn2 != null) {
+                    spawnPositions.add(spawn2);
+                }
+            }
+
             List<String> kitNames = config.getStringList(path + ".usable_kits");
             List<KitDataController.Kit> kits = new ArrayList<>();
             for (String kitName : kitNames) {
@@ -85,7 +92,7 @@ public class ArenaController {
                 if (kit != null) kits.add(kit);
             }
 
-            Arena arena = new Arena(key, kits, icon, corner1, corner2, spawn1, spawn2);
+            Arena arena = new Arena(key, kits, icon, corner1, corner2, spawnPositions);
             arenaList.put(key.toLowerCase(), arena);
         }
     }
@@ -95,8 +102,7 @@ public class ArenaController {
 
         config.set(path + ".corner1", arena.getCorner1());
         config.set(path + ".corner2", arena.getCorner2());
-        config.set(path + ".spawn1", arena.getSpawnPos1());
-        config.set(path + ".spawn2", arena.getSpawnPos2());
+        config.set(path + ".spawn_positions", arena.getSpawnPositions());
         config.set(path + ".icon", arena.getArenaIcon());
 
         List<String> kitNames = new ArrayList<>();

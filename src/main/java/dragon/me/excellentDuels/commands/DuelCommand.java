@@ -1,6 +1,7 @@
 package dragon.me.excellentDuels.commands;
 
 import dragon.me.excellentDuels.ExcellentDuels;
+import dragon.me.excellentDuels.api.command.DuelCommandProvider;
 import dragon.me.excellentDuels.utils.ConfigProvider;
 import dragon.me.excellentDuels.controllers.InviteController;
 import io.papermc.paper.command.brigadier.BasicCommand;
@@ -15,49 +16,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DuelCommand implements BasicCommand {
+public class DuelCommand implements BasicCommand, DuelCommandProvider {
 
     @Override
     public void execute(@NotNull CommandSourceStack commandSourceStack, @NotNull String[] args) {
-        if (!(commandSourceStack.getSender() instanceof  Player p)){
-            commandSourceStack.getSender().sendRichMessage("⏵<yellow><u>ExcellentDuels</u> </yellow>» <red>Only players can execute this command.</red>");
-            return;
-
-        }else {
-            if (args.length != 2){
-                p.sendRichMessage(ConfigProvider.INCORRECT_USAGE);
-                return;
-            }
-        }
-        Player target = Bukkit.getPlayer(args[0]);
-        if (target == p){
-            p.sendRichMessage(ConfigProvider.SELF_ERROR);
-
-            return;
-        }
-
-        if (target == null){
-            p.sendRichMessage(ConfigProvider.PLAYER_IS_OFFLINE);
-            return;
-        }
-        String kit = args[1];
-
-        ExcellentDuels.getInviteController().addInvite(new InviteController.Invite(p,target,kit));
-        target.sendRichMessage(ConfigProvider.INVITATION_MESSAGE
-                .replace("%player1%",p.getName())
-                .replace("%kit%",kit));
-        p.sendRichMessage(ConfigProvider.INVITATION_CONFIRMATION.replace("%player2%", target.getName())
-                .replace("%kit%", kit));
+        reimplementation(commandSourceStack,args);
     }
 
     @Override
     public @NotNull Collection<String> suggest(@NotNull CommandSourceStack commandSourceStack, @NotNull String[] args) {
-        if (args.length <= 1 && args.length <= 2){
-            return Bukkit.getOnlinePlayers().stream().map( player -> player.getName()).collect(Collectors.toList());
-        }else if ( args.length >= 1){
-            return ExcellentDuels.getKitDataController().getAllKits().stream().map(kit -> kit.getName()).toList();
-        }
-        return List.of();
+        return reimplementSuggestion(commandSourceStack,args);
     }
 
     @Override

@@ -54,28 +54,28 @@ public final class ExcellentDuels extends JavaPlugin {
 
         saveDefaultConfig();
 
-        this.getLogger().info("\u001B[33m | Loading Event listeners...Done!\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Loading Event listeners...Done!\u001B[0m");
         registerListeners();
-        this.getLogger().info("\u001B[33m | Loading MessageProvider... Done!\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Loading MessageProvider... Done!\u001B[0m");
         new ConfigProvider().onInit();
         inviteController = new InviteController();
-        this.getLogger().info("\u001B[33m | Loading InviteController...Done!\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Loading InviteController...Done!\u001B[0m");
 
         persistentInventoryManager = new PersistentInventoryManager();
-        this.getLogger().info("\u001B[33m | Loading PersistentInventoryManager...Done!\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Loading PersistentInventoryManager...Done!\u001B[0m");
 
         Bukkit.getScheduler().runTaskTimer(this,new GeneralScheduler(),0,20);
-        this.getLogger().info("\u001B[33m | Starting up the scheduler... Done!\u001B[0m");
-        this.getLogger().info("\u001B[33m | Starting up the KitDataController... Done!\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Starting up the scheduler... Done!\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Starting up the KitDataController... Done!\u001B[0m");
         kitDataController = new KitDataController();
 
-        this.getLogger().info("\u001B[33m | Starting ArenaDataController... Done!\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Starting ArenaDataController... Done!\u001B[0m");
         arenaController = new ArenaController();
-        this.getLogger().info("\u001B[33m | Starting GameController... Done!\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Starting GameController... Done!\u001B[0m");
         gameController = new GameController();
-        this.getLogger().info("\u001B[33m | Starting up the InventoryController...\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Starting up the InventoryController...\u001B[0m");
         inventoryController = new InventoryController();
-        this.getLogger().info("\u001B[33m | Loading commands...\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Loading commands...\u001B[0m");
 
 
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
