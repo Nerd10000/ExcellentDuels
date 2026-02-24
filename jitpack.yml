@@ -1,4 +1,7 @@
 jdk:
   - openjdk21
+before_install:
+  - sdk install gradle 8.8
+  - sdk use gradle 8.8
 install:
-  - ./gradlew publishToMavenLocal
+  - gradle publishToMavenLocal --no-daemon
