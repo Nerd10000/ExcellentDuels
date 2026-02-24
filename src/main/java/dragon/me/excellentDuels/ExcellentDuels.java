@@ -1,5 +1,6 @@
 package dragon.me.excellentDuels;
 
+import dragon.me.excellentDuels.api.DuelsApi;
 import dragon.me.excellentDuels.commands.*;
 import dragon.me.excellentDuels.controllers.*;
 import dragon.me.excellentDuels.listener.*;
@@ -10,6 +11,7 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -85,6 +87,8 @@ public final class ExcellentDuels extends JavaPlugin {
             commands.registrar().register("exarenas", new ArenaCommand());
             commands.registrar().register("exduels", new DuelsCommand());
         });
+
+        Bukkit.getServicesManager().register(DuelsApi.class,new ExternalDuelsApi(),this, ServicePriority.Normal);
 
     }
     public void registerListeners(){
