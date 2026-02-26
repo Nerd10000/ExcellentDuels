@@ -1,7 +1,10 @@
 package dragon.me.excellentDuels;
 
+import dragon.me.excellentDuels.api.DuelsApi;
 import dragon.me.excellentDuels.commands.*;
 import dragon.me.excellentDuels.controllers.*;
+import dragon.me.excellentDuels.hooks.CombatLogXHook;
+import dragon.me.excellentDuels.hooks.placeholderapi.PlaceholderExpansion;
 import dragon.me.excellentDuels.listener.*;
 import dragon.me.excellentDuels.utils.ConfigProvider;
 import dragon.me.excellentDuels.utils.GeneralScheduler;
@@ -10,6 +13,7 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -53,29 +57,37 @@ public final class ExcellentDuels extends JavaPlugin {
         }
 
         saveDefaultConfig();
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")){
 
-        this.getLogger().info("\u001B[33m | Loading Event listeners...Done!\u001B[0m");
+            this.getLogger().info("\u001B[33m  | Hooked into PlaceholderAPI!\u001B[0m");
+            new PlaceholderExpansion().register();
+        }
+        if (Bukkit.getPluginManager().isPluginEnabled("CombatLogX")){
+            this.getLogger().info("\u001B[33m  | Hooked into CombatLogX!\u001B[0m");
+            getServer().getPluginManager().registerEvents(new CombatLogXHook(),this);
+        }
+        this.getLogger().info("\u001B[33m  | Loading Event listeners...Done!\u001B[0m");
         registerListeners();
-        this.getLogger().info("\u001B[33m | Loading MessageProvider... Done!\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Loading MessageProvider... Done!\u001B[0m");
         new ConfigProvider().onInit();
         inviteController = new InviteController();
-        this.getLogger().info("\u001B[33m | Loading InviteController...Done!\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Loading InviteController...Done!\u001B[0m");
 
         persistentInventoryManager = new PersistentInventoryManager();
-        this.getLogger().info("\u001B[33m | Loading PersistentInventoryManager...Done!\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Loading PersistentInventoryManager...Done!\u001B[0m");
 
         Bukkit.getScheduler().runTaskTimer(this,new GeneralScheduler(),0,20);
-        this.getLogger().info("\u001B[33m | Starting up the scheduler... Done!\u001B[0m");
-        this.getLogger().info("\u001B[33m | Starting up the KitDataController... Done!\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Starting up the scheduler... Done!\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Starting up the KitDataController... Done!\u001B[0m");
         kitDataController = new KitDataController();
 
-        this.getLogger().info("\u001B[33m | Starting ArenaDataController... Done!\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Starting ArenaDataController... Done!\u001B[0m");
         arenaController = new ArenaController();
-        this.getLogger().info("\u001B[33m | Starting GameController... Done!\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Starting GameController... Done!\u001B[0m");
         gameController = new GameController();
-        this.getLogger().info("\u001B[33m | Starting up the InventoryController...\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Starting up the InventoryController...\u001B[0m");
         inventoryController = new InventoryController();
-        this.getLogger().info("\u001B[33m | Loading commands...\u001B[0m");
+        this.getLogger().info("\u001B[33m  | Loading commands...\u001B[0m");
 
 
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
@@ -85,6 +97,8 @@ public final class ExcellentDuels extends JavaPlugin {
             commands.registrar().register("exarenas", new ArenaCommand());
             commands.registrar().register("exduels", new DuelsCommand());
         });
+
+        Bukkit.getServicesManager().register(DuelsApi.class,new ExternalDuelsApi(),this, ServicePriority.Normal);
 
     }
     public void registerListeners(){

@@ -4,3 +4,14 @@ main: dragon.me.excellentDuels.ExcellentDuels
 description: A lightweight async modern duels plugin.
 api-version: '1.21.11'
 bootstrapper: dragon.me.excellentDuels.PaperPluginBootstrapper
+softdepend: ["PlaceholderAPI"]
+dependencies:
+  server:
+    PlaceholderAPI:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    CombatLogX:
+      load: BEFORE
+      required: false
+      join-classpath: true

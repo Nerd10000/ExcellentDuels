@@ -1,49 +1,65 @@
 package dragon.me.excellentDuels.controllers;
 
+import dragon.me.excellentDuels.api.models.Match;
+import dragon.me.excellentDuels.api.models.Team;
 import dragon.me.excellentDuels.controllers.enums.GameState;
-import lombok.Getter;
-import lombok.Setter;
+import dragon.me.excellentDuels.controllers.enums.PlayerStatus; // Import PlayerStatus
+
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors; // Import Collectors
 
 public class GameController {
 
-    public  static List<Game> gameList = new ArrayList<>();
+    public  static List<Match> gameList = new ArrayList<>();
 
     public GameController(){
 
     }
 
-    public void addGame(Game g){
+    public void addGame(Match g){
         gameList.add(g);
     }
 
-    public void removeGame(Game game) {
+    public void removeGame(Match game) {
         gameList.remove(game);
     }
-    public static  void setGameState(Game game,GameState state){
+    public static  void setGameState(Match game,GameState state){
         game.setState(state);
 
     }
-    public static Player getOpponent(Player player, Game game) {
-        if (game.getTeamRed().contains(player)) {
-            return game.getTeamBlue().get(0); // Assuming 1v1 duel
-        } else if (game.getTeamBlue().contains(player)) {
-            return game.getTeamRed().get(0); // Assuming 1v1 duel
+    public static List<Player> getOpponents(Player player, Match game) {
+        if (player == null || game == null || game.getTeams() == null) {
+            return Collections.emptyList();
         }
-        return null; // Should not happen in a valid duel context
+
+        List<Player> opponents = new ArrayList<>();
+
+        for (Team team : game.getTeams()) {
+            if (team == null || team.getPlayers() == null) continue;
+
+            if (!team.getPlayers().contains(player)) {
+                opponents.addAll(team.getPlayers());
+            }
+        }
+
+        return opponents;
     }
 
     public static boolean isPlayerInDuel(String name) {
+        if (name == null) return false;
+
         return gameList.stream()
-                .anyMatch(game -> game.getTeamRed().stream().anyMatch(player -> player.getName().equals(name)) ||
-                                   game.getTeamBlue().stream().anyMatch(player -> player.getName().equals(name)));
+                .flatMap(match -> match.getTeams().stream())
+                .flatMap(team -> team.getPlayers().stream())
+                .anyMatch(player -> player.getName().equalsIgnoreCase(name));
     }
 
     public static boolean isArenaInUsage(String arenaName){
-        for (Game g : gameList){
+        for (Match g : gameList){
             if (g.getArenaName().equals(arenaName)){
                 return  true;
             }
@@ -51,20 +67,44 @@ public class GameController {
         return false;
     }
 
-    @Getter
-    public static  class Game {
-        private final List<Player> teamBlue,teamRed;
-        private  final String arenaName;
-        @Setter
-        private GameState state;
-        private String kitName;
-        public Game(List<Player> teamBlue, List<Player> teamRed, String arenaName,String kitName){
-            this.teamBlue = (teamBlue != null) ? new ArrayList<>(teamBlue) : new ArrayList<>();
-            this.teamRed = (teamRed != null) ? new ArrayList<>(teamRed) : new ArrayList<>();
-            this.arenaName = arenaName;
-            this.kitName = kitName;
+    public Match get(Player participant) {
+        if (participant == null) return null;
+
+        for (Match match : gameList) {
+            if (match.getTeams() == null) continue;
+
+            for (Team team : match.getTeams()) {
+                if (team.getPlayers() == null) continue;
+                if (team.getPlayers().contains(participant)) {
+                    return match;
+                }
+            }
         }
 
+        return null;
     }
 
+    public static boolean isTeamEliminated(Match match, Team team) {
+        return team.getPlayers().stream()
+                .allMatch(player -> match.getParticipantStatuses().get(player.getName()) == PlayerStatus.DEAD);
+    }
+
+    public static List<Team> getRemainingTeams(Match match) {
+        return match.getTeams().stream()
+                .filter(team -> team.getPlayers().stream()
+                        .anyMatch(player -> match.getParticipantStatuses().get(player.getName()) == PlayerStatus.LIVING))
+                .collect(Collectors.toList());
+    }
+
+    public static Team getWinningTeam(Match match) {
+        List<Team> remainingTeams = getRemainingTeams(match);
+        if (remainingTeams.size() == 1) {
+            return remainingTeams.get(0);
+        }
+        return null;
+    }
+
+    public static boolean isMatchOver(Match match) {
+        return getRemainingTeams(match).size() <= 1;
+    }
 }

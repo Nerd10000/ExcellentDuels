@@ -1,6 +1,6 @@
 package dragon.me.excellentDuels.listener;
 
-import dragon.me.excellentDuels.ExcellentDuels;
+import dragon.me.excellentDuels.api.models.Match;
 import dragon.me.excellentDuels.controllers.GameController;
 import dragon.me.excellentDuels.controllers.enums.GameState;
 import org.bukkit.Location;
@@ -16,13 +16,14 @@ public class PlayerMoveListener implements Listener {
     @EventHandler
     public void onEvent(PlayerMoveEvent e){
         Player p = e.getPlayer();
-        Optional<GameController.Game > gameOptional = GameController.gameList.stream()
-                .filter(game -> game.getTeamRed().contains(p) || game.getTeamBlue().contains(p)).findFirst();
+        Optional<Match> gameOptional = GameController.gameList.stream()
+                .filter(game ->game.getTeams().stream()
+                        .anyMatch(team -> team.getPlayers().contains(p))).findFirst();
         if (gameOptional.isEmpty()){
             return;
         }
 
-        GameController.Game game = gameOptional.get();
+        Match game = gameOptional.get();
 
 
         if (game.getState() == GameState.STARTING){

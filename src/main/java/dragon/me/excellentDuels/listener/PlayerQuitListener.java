@@ -1,10 +1,9 @@
 package dragon.me.excellentDuels.listener;
 
 import dragon.me.excellentDuels.ExcellentDuels;
+import dragon.me.excellentDuels.api.models.Match;
 import dragon.me.excellentDuels.controllers.GameController;
-import dragon.me.excellentDuels.controllers.InventoryController;
 import dragon.me.excellentDuels.utils.ConfigProvider;
-import dragon.me.excellentDuels.utils.inventory.PersistentInventoryManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
@@ -13,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.List;
 import java.util.Optional;
 
 public class PlayerQuitListener implements Listener {
@@ -22,19 +22,24 @@ public class PlayerQuitListener implements Listener {
         if (GameController.isPlayerInDuel(e.getPlayer().getName())){
 
             Player p = e.getPlayer();
-            Optional<GameController.Game>
+            Optional<Match>
                     game = GameController.gameList
-                    .stream().filter(game1 -> game1.getTeamBlue().contains(p) || game1.getTeamRed().contains(p)).findFirst();
+                    .stream().filter(game1 -> game1.getTeams().stream()
+                            .anyMatch(team -> team.getPlayers().contains(p))).findFirst();
 
             if (game.isEmpty()) return;
 
-            Player opponent = GameController.getOpponent(p,game.get());
+            List<Player> opponent = GameController.getOpponents(p,game.get());
             ExcellentDuels.getGameController().removeGame(game.get());
-            opponent.showTitle(Title.title(
-                    MiniMessage.miniMessage().deserialize(ConfigProvider.CANCELLED_TITLE),
-                    MiniMessage.miniMessage().deserialize(ConfigProvider.COUNTDOWN_SUBTITLE),
-                    Title.DEFAULT_TIMES
-            ));
+
+            for (Player opponents : opponent){
+                opponents.showTitle(Title.title(
+                        MiniMessage.miniMessage().deserialize(ConfigProvider.CANCELLED_TITLE),
+                        MiniMessage.miniMessage().deserialize(ConfigProvider.COUNTDOWN_SUBTITLE),
+                        Title.DEFAULT_TIMES
+                ));
+            }
+
 
             ExcellentDuels.getPersistentInventoryManager().add(
                     p.getUniqueId(),ExcellentDuels.getInventoryController().getInventory(p.getUniqueId()));
@@ -43,18 +48,22 @@ public class PlayerQuitListener implements Listener {
                 if (ConfigProvider.SPAWN_LOCATION == null){
                     ExcellentDuels.getPlugin().getLogger().warning("HEY! It looks like you forgot to set the spawn location! Please set it via \033[38;5;220m/exduels setspawn\u001B[0m in game.");
                 }else {
-                    opponent.teleport(ConfigProvider.SPAWN_LOCATION);
-                    p.teleport(ConfigProvider.SPAWN_LOCATION);
+                    for (Player opponents : opponent){
+                        opponents.teleport(ConfigProvider.SPAWN_LOCATION);
+                        p.teleport(ConfigProvider.SPAWN_LOCATION);
+                    }
                 }
 
-                p.getInventory().setContents(ExcellentDuels.getInventoryController().getInventory(p.getUniqueId()));
-                opponent.getInventory().setContents(ExcellentDuels.getInventoryController().getInventory(opponent.getUniqueId()));
+                for (Player opponents : opponent){
+                    p.getInventory().setContents(ExcellentDuels.getInventoryController().getInventory(p.getUniqueId()));
+                    opponents.getInventory().setContents(ExcellentDuels.getInventoryController().getInventory(opponents.getUniqueId()));
+                }
 
 
                 for (String command : ConfigProvider.DUEL_END_COMMANDS){
                     String formated =  command
                             .replace("%arena%",game.get().getArenaName())
-                            .replace("%winner%",opponent.getName())
+
                             .replace("%loser%",p.getName())
                             .replace("%kit%", game.get().getKitName());
 

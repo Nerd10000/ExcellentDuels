@@ -27,11 +27,11 @@ messages:
 
   2nd_corner_set: "%prefix% <yellow>2nd corner set for <gold>%arena%</gold>! <click:run_command:'/arena spawn1 %arena%'><green><i><u>Click here to set the 1st spawn</u></i></green></click></yellow>"
 
-  1st_spawn_set: "%prefix% <yellow>1st spawn set for <gold>%arena%</gold>! <click:run_command:'/arena spawn2 %arena%'><green><i><u>Click here to set the 2nd spawn</u></i></green></click></yellow>"
-
-  2nd_spawn_set: "%prefix% <yellow>2nd spawn set for <gold>%arena%</gold>! <green><i><u>Arena setup complete!</u></i></green></yellow>"
-
+  add_spawnpoint: "%prefix% <yellow>Added a new spawnpoint for <gold>%arena%<yellow>!"
+  remove_spawnpoint: "%prefix% <yellow>Removed the <gold>#%index%<yellow> spawnpoint from  <gold>%arena%<yellow>!"
+  index_error: "%prefix% <red>Invalid spawnpoint index for <dark_red>%arena%!"
   arena_removed: "%prefix% <yellow>The arena <gold>%arena%</gold> has been removed.</yellow>"
+  clear_spawnpoints: "%prefix% <yellow> Cleared all spawnpoints for <gold>%arena%<yellow>!"
 
   arena_icon_set: "%prefix% <yellow>Icon set for arena <gold>%arena%</gold>.</yellow>"
 
@@ -46,12 +46,13 @@ messages:
   victory_title: "<gold>ᴠɪᴄᴛᴏʀʏ"
   victory_subtitle: "<grey>You've slayed him like a champion!"
 
-  duel_victory: "%prefix% <grey>You have won the duel against <yellow>%loser%</yellow><grey>!"
-  duel_defeat: "%prefix% <red>You lost the duel against <yellow>%winner%</yellow>!</red>"
+  duel_victory: "%prefix% <grey>You have won the duel against <yellow>%winner_team%</yellow><grey>!"
+  duel_defeat: "%prefix% <red>You lost the duel against <yellow>%winner_tean%</yellow>!</red>"
+  player_eliminated: "%prefix% <gold>%player%</gold> has been eliminated!"
 
   cancelled_title: "<red>ᴍᴀᴛᴄʜ ᴄᴀɴᴄᴇʟʟᴇᴅ!"
-  cancelled_subtitle: "<grey>Looks like your opponent left the game!
-  "
+  cancelled_subtitle: "<grey>Looks like your opponent left the game!"
+  duel_draw: "%prefix% <grey>The duel ended in <yellow>draw<grey>!"
   blacklisted_commands_while_in_match: "%prefix% <red>You can't execute that command while in a match!"
   # ===== Countdown =====
   countdown_subtitle: "<grey>Prepare for the fight!"
@@ -68,7 +69,7 @@ messages:
     default: "<yellow>%number%"
 
     # ======= Help =======
-
+  no_invitation: "%prefix% <red>You don't have any invitation from <dark_red>%player%<red>!"
   help:
       - "<gold>%prefix% Help:"
       - ""

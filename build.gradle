@@ -1,18 +1,12 @@
 plugins {
     id 'java'
-    id("xyz.jpenilla.run-paper") version "2.3.1"
+    id "xyz.jpenilla.run-paper" version "2.3.1"
+    id 'maven-publish'
+    id("com.gradleup.shadow") version "9.3.0"
 }
 
 group = 'dragon.me'
 version = '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-    maven {
-        name = "papermc-repo"
-        url = "https://repo.papermc.io/repository/maven-public/"
-    }
-}
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
@@ -21,19 +15,30 @@ dependencies {
 
     testCompileOnly("org.projectlombok:lombok:1.18.42")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.42")
+    compileOnly 'me.clip:placeholderapi:2.12.2'
+    compileOnly 'com.github.sirblobman.api:core:2.9-SNAPSHOT'
+    compileOnly 'com.github.sirblobman.combatlogx:api:11.6-SNAPSHOT'
 }
 
 tasks {
     runServer {
-        // Configure the Minecraft version for our task.
-        // This is the only required configuration besides applying the plugin.
-        // Your plugin's jar (or shadowJar if present) will be used automatically.
         minecraftVersion("1.21")
+        dependsOn shadowJar
+        pluginJars.from(tasks.shadowJar)
     }
+}
+
+shadowJar {
+    archiveClassifier.set("")
+}
+
+jar {
+    enabled = false
 }
 
 def targetJavaVersion = 21
 java {
+    withSourcesJar()
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
@@ -44,7 +49,6 @@ java {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release.set(targetJavaVersion)
     }
@@ -54,7 +58,15 @@ processResources {
     def props = [version: version]
     inputs.properties props
     filteringCharset 'UTF-8'
-    filesMatching('plugin.yml') {
+    filesMatching('paper-plugin.yml') {
         expand props
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
     }
 }

@@ -1,7 +1,11 @@
 package dragon.me.excellentDuels.utils;
 
 import dragon.me.excellentDuels.ExcellentDuels;
+import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +25,12 @@ public class ConfigProvider {
     public static String DUEL_ACCEPTED;
     public static String DUEL_VICTORY;
     public static String DUEL_DEFEAT;
+    public static String PLAYER_ELIMINATED;
 
     // Arenas
     public static String ARENA_CREATED;
     public static String CORNER1_SET;
     public static String CORNER2_SET;
-    public static String FIRST_SPAWN_SET;
-    public static String SECOND_SPAWN_SET;
     public static String NO_SUCH_ARENA;
     public static String ARENA_ICON_SET;
     public static String KIT_ADDED_TO_ARENA;
@@ -52,62 +55,62 @@ public class ConfigProvider {
 
     public static  String CANCELLED_TITLE;
     public static  String CANCELLED_SUBTITLE;
+    public static String NO_INVITES;
+    public static String ADD_SPAWN;
+    public static  String REMOVE_SPAWN;
+    public static String INDEX_ERROR;
+    public static String CLEAR_SPAWNS;
+    public static String DRAW;
+
     public void onInit() {
         var config = ExcellentDuels.getPlugin().getConfig();
 
-        PREFIX = config.getString("messages.prefix");
+        PREFIX = config.getString("messages.prefix", "⏵<yellow><u>ExcellentDuels</u> </yellow>»");
 
-        INCORRECT_USAGE = config.getString("messages.incorrect_usage").replace("%prefix%", PREFIX);
-        INVITE_EXPIRE_TIME = config.getInt("invite_expire_time");
-        INVITE_EXPIRED_MESSAGE = config.getString("messages.invite_expired").replace("%prefix%", PREFIX);
-        PLAYER_IS_OFFLINE = config.getString("messages.player_is_offline").replace("%prefix%", PREFIX);
-        INVITATION_MESSAGE = config.getString("messages.invitation").replace("%prefix%", PREFIX);
-        SELF_ERROR = config.getString("messages.self_error").replace("%prefix%", PREFIX);
-        INVITATION_CONFIRMATION = config.getString("messages.invitation_confirmation").replace("%prefix%", PREFIX);
-        KIT_CREATED = config.getString("messages.kit_created").replace("%prefix%", PREFIX);
-        NO_SUCH_KIT = config.getString("messages.no_such_kit").replace("%prefix%", PREFIX);
-        DUEL_ACCEPTED = config.getString("messages.duel_accept").replace("%prefix%", PREFIX);
-        DUEL_VICTORY = config.getString("messages.duel_victory").replace("%prefix%", PREFIX);
-        DUEL_DEFEAT = config.getString("messages.duel_defeat").replace("%prefix%", PREFIX);
+        INCORRECT_USAGE = getMsg(config, "messages.incorrect_usage");
+        INVITE_EXPIRE_TIME = config.getInt("invite_expire_time", 120);
+        INVITE_EXPIRED_MESSAGE = getMsg(config, "messages.invite_expired");
+        PLAYER_IS_OFFLINE = getMsg(config, "messages.player_is_offline");
+        INVITATION_MESSAGE = getMsg(config, "messages.invitation");
+        SELF_ERROR = getMsg(config, "messages.self_error");
+        INVITATION_CONFIRMATION = getMsg(config, "messages.invitation_confirmation");
+        KIT_CREATED = getMsg(config, "messages.kit_created");
+        NO_SUCH_KIT = getMsg(config, "messages.no_such_kit");
+        DUEL_ACCEPTED = getMsg(config, "messages.duel_accept");
+        DUEL_VICTORY = getMsg(config, "messages.duel_victory");
+        DUEL_DEFEAT = getMsg(config, "messages.duel_defeat");
+        PLAYER_ELIMINATED = getMsg(config, "messages.player_eliminated");
 
-        ARENA_CREATED = config.getString("messages.duel_arena_created").replace("%prefix%", PREFIX);
-        CORNER1_SET = config.getString("messages.1st_corner_set").replace("%prefix%", PREFIX);
-        CORNER2_SET = config.getString("messages.2nd_corner_set").replace("%prefix%", PREFIX);
-        FIRST_SPAWN_SET = config.getString("messages.1st_spawn_set").replace("%prefix%", PREFIX);
-        SECOND_SPAWN_SET = config.getString("messages.2nd_spawn_set").replace("%prefix%", PREFIX);
-        NO_SUCH_ARENA = config.getString("messages.no_such_arena").replace("%prefix%", PREFIX);
-        ARENA_ICON_SET = config.getString("messages.arena_icon_set").replace("%prefix%", PREFIX);
-        KIT_ADDED_TO_ARENA = config.getString("messages.kit_added_to_arena").replace("%prefix%", PREFIX);
-        KIT_REMOVED_FROM_ARENA = config.getString("messages.kit_removed_from_arena").replace("%prefix%", PREFIX);
-        ARENA_REMOVED = config.getString("messages.arena_removed").replace("%prefix%", PREFIX);
-        SPAWN_HAS_BEEN_SET = config.getString("messages.spawn_has_been_set")
-                .replace("%prefix%",PREFIX);
+        ARENA_CREATED = getMsg(config, "messages.duel_arena_created");
+        CORNER1_SET = getMsg(config, "messages.1st_corner_set");
+        CORNER2_SET = getMsg(config, "messages.2nd_corner_set");
+        NO_SUCH_ARENA = getMsg(config, "messages.no_such_arena");
+        ARENA_ICON_SET = getMsg(config, "messages.arena_icon_set");
+        KIT_ADDED_TO_ARENA = getMsg(config, "messages.kit_added_to_arena");
+        KIT_REMOVED_FROM_ARENA = getMsg(config, "messages.kit_removed_from_arena");
+        ARENA_REMOVED = getMsg(config, "messages.arena_removed");
+        SPAWN_HAS_BEEN_SET = getMsg(config, "messages.spawn_has_been_set");
 
-        DEATH_TITLE = config.getString("messages.death_title")
-                .replace("%prefix%", PREFIX);
+        DEATH_TITLE = getMsg(config, "messages.death_title");
 
-        DEATH_SUBTITLE = config.getString("messages.death_subtitle")
-                .replace("%prefix%", PREFIX);
+        DEATH_SUBTITLE = getMsg(config, "messages.death_subtitle");
 
-        VICTORY_TITLE = config.getString("messages.victory_title")
-                .replace("%prefix%", PREFIX);
+        VICTORY_TITLE = getMsg(config, "messages.victory_title");
 
-        VICTORY_SUBTITLE = config.getString("messages.victory_subtitle")
-                .replace("%prefix%", PREFIX);
+        VICTORY_SUBTITLE = getMsg(config, "messages.victory_subtitle");
 
-        DUEL_END_DELAY = config.getInt("delays.duel_end");
+        DUEL_END_DELAY = config.getInt("delays.duel_end", 5);
         SPAWN_LOCATION = config.getLocation("spawn_location");
 
-        COUNTDOWN_DELAY = config.getInt("delays.countdown");
+        COUNTDOWN_DELAY = config.getInt("delays.countdown", 60);
 
-        COUNTDOWN_DEFAULT = config.getString("messages.countdown.default");
-        COUNTDOWN_GO = config.getString("messages.countdown.go");
-        COUNTDOWN_SUBTITLE =config.getString("messages.countdown_subtitle");
+        COUNTDOWN_DEFAULT = config.getString("messages.countdown.default", "<yellow>%number%");
+        COUNTDOWN_GO = config.getString("messages.countdown.go", "<gold>ɢᴏ!");
+        COUNTDOWN_SUBTITLE = config.getString("messages.countdown_subtitle", "<grey>Prepare for the fight!");
 
         WHITELISTED_COMMANDS = config.getStringList("whitelisted_commands");
 
-        BLACKLISTED_COMMAND_WHERE_RAN = config.getString("messages.blacklisted_commands_while_in_match")
-                .replace("%prefix%",PREFIX);
+        BLACKLISTED_COMMAND_WHERE_RAN = getMsg(config, "messages.blacklisted_commands_while_in_match");
 
         DUEL_START_COMMANDS = config.getStringList("duel_start_commands");
 
@@ -120,8 +123,25 @@ public class ConfigProvider {
         }
         HELP_MESSAGE = formattedHelp;
 
-        CANCELLED_TITLE = config.getString("messages.cancelled_title");
-        CANCELLED_SUBTITLE = config.getString("messages.cancelled_subtitle");
+        CANCELLED_TITLE = config.getString("messages.cancelled_title", "<red>ᴍᴀᴛᴄʜ ᴄᴀɴᴄᴇʟʟᴇᴅ!");
+        CANCELLED_SUBTITLE = config.getString("messages.cancelled_subtitle", "<grey>Looks like your opponent left the game!");
+
+        NO_INVITES = getMsg(config,"messages.no_invitation");
+        ADD_SPAWN = getMsg(config, "messages.add_spawnpoint");
+        REMOVE_SPAWN = getMsg(config,"messages.remove_spawnpoint");
+        INDEX_ERROR = getMsg(config,"messages.index_error");
+
+        CLEAR_SPAWNS = getMsg(config,"messages.clear_spawnpoints");
+        DRAW = getMsg(config,"messages.duel_draw");
+    }
+
+    private String getMsg(FileConfiguration config, String path) {
+        String msg = config.getString(path);
+        if (msg == null) {
+            return "Missing config: " + path;
+        }
+
+        return msg.replace("%prefix%", PREFIX);
     }
 
     public void reload() {
