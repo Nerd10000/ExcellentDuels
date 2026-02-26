@@ -1,7 +1,7 @@
 package dragon.me.excellentDuels.controllers;
 
-import dragon.me.excellentDuels.api.abstractions.Match;
-import dragon.me.excellentDuels.api.abstractions.Team;
+import dragon.me.excellentDuels.api.models.Match;
+import dragon.me.excellentDuels.api.models.Team;
 import dragon.me.excellentDuels.controllers.enums.GameState;
 import dragon.me.excellentDuels.controllers.enums.PlayerStatus; // Import PlayerStatus
 
@@ -76,7 +76,7 @@ public class GameController {
             for (Team team : match.getTeams()) {
                 if (team.getPlayers() == null) continue;
                 if (team.getPlayers().contains(participant)) {
-                    return match; // Found the match
+                    return match;
                 }
             }
         }

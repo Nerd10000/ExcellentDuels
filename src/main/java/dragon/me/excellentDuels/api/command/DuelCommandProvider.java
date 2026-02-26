@@ -1,8 +1,9 @@
 package dragon.me.excellentDuels.api.command;
 
 import dragon.me.excellentDuels.ExcellentDuels;
-import dragon.me.excellentDuels.api.abstractions.Team;
+import dragon.me.excellentDuels.api.models.Team;
 import dragon.me.excellentDuels.controllers.InviteController;
+import dragon.me.excellentDuels.hooks.PlaceholderAPIHook;
 import dragon.me.excellentDuels.utils.ConfigProvider;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.Bukkit;
@@ -32,13 +33,13 @@ public interface DuelCommandProvider {
 
 
         ExcellentDuels.getInviteController().addInvite(new InviteController.Invite(p, target, kit));
-        target.sendRichMessage(ConfigProvider.INVITATION_MESSAGE
+        target.sendRichMessage(PlaceholderAPIHook.format(target,ConfigProvider.INVITATION_MESSAGE
                 .replace("%player1%", p.getName())
-                .replace("%kit%", kit));
+                .replace("%kit%", kit)));
 
-        p.sendRichMessage(ConfigProvider.INVITATION_CONFIRMATION
+        p.sendRichMessage(PlaceholderAPIHook.format(p,ConfigProvider.INVITATION_CONFIRMATION
                 .replace("%player2%", target.getName())
-                .replace("%kit%", kit));
+                .replace("%kit%", kit)));
     }
 
     default List<String> reimplementSuggestion(@NotNull CommandSourceStack commandSourceStack, @NotNull String[] args){

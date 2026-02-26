@@ -30,7 +30,10 @@ public class KitsCommand implements BasicCommand, KitsCommandProvider {
 
     @Override
     public boolean canUse(@NotNull CommandSender sender) {
-        return sender instanceof Player;
+        if (sender instanceof Player p){
+            return true;
+        }
+        return  false;
     }
 
     @Override

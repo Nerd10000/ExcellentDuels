@@ -1,6 +1,9 @@
 package dragon.me.excellentDuels.utils;
 
 import dragon.me.excellentDuels.ExcellentDuels;
+import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -28,8 +31,6 @@ public class ConfigProvider {
     public static String ARENA_CREATED;
     public static String CORNER1_SET;
     public static String CORNER2_SET;
-    public static String FIRST_SPAWN_SET;
-    public static String SECOND_SPAWN_SET;
     public static String NO_SUCH_ARENA;
     public static String ARENA_ICON_SET;
     public static String KIT_ADDED_TO_ARENA;
@@ -54,6 +55,13 @@ public class ConfigProvider {
 
     public static  String CANCELLED_TITLE;
     public static  String CANCELLED_SUBTITLE;
+    public static String NO_INVITES;
+    public static String ADD_SPAWN;
+    public static  String REMOVE_SPAWN;
+    public static String INDEX_ERROR;
+    public static String CLEAR_SPAWNS;
+    public static String DRAW;
+
     public void onInit() {
         var config = ExcellentDuels.getPlugin().getConfig();
 
@@ -76,8 +84,6 @@ public class ConfigProvider {
         ARENA_CREATED = getMsg(config, "messages.duel_arena_created");
         CORNER1_SET = getMsg(config, "messages.1st_corner_set");
         CORNER2_SET = getMsg(config, "messages.2nd_corner_set");
-        FIRST_SPAWN_SET = getMsg(config, "messages.1st_spawn_set");
-        SECOND_SPAWN_SET = getMsg(config, "messages.2nd_spawn_set");
         NO_SUCH_ARENA = getMsg(config, "messages.no_such_arena");
         ARENA_ICON_SET = getMsg(config, "messages.arena_icon_set");
         KIT_ADDED_TO_ARENA = getMsg(config, "messages.kit_added_to_arena");
@@ -119,6 +125,14 @@ public class ConfigProvider {
 
         CANCELLED_TITLE = config.getString("messages.cancelled_title", "<red>ᴍᴀᴛᴄʜ ᴄᴀɴᴄᴇʟʟᴇᴅ!");
         CANCELLED_SUBTITLE = config.getString("messages.cancelled_subtitle", "<grey>Looks like your opponent left the game!");
+
+        NO_INVITES = getMsg(config,"messages.no_invitation");
+        ADD_SPAWN = getMsg(config, "messages.add_spawnpoint");
+        REMOVE_SPAWN = getMsg(config,"messages.remove_spawnpoint");
+        INDEX_ERROR = getMsg(config,"messages.index_error");
+
+        CLEAR_SPAWNS = getMsg(config,"messages.clear_spawnpoints");
+        DRAW = getMsg(config,"messages.duel_draw");
     }
 
     private String getMsg(FileConfiguration config, String path) {
@@ -126,6 +140,7 @@ public class ConfigProvider {
         if (msg == null) {
             return "Missing config: " + path;
         }
+
         return msg.replace("%prefix%", PREFIX);
     }
 

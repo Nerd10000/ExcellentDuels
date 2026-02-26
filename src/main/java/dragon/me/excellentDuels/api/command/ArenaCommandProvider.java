@@ -3,6 +3,7 @@ package dragon.me.excellentDuels.api.command;
 import dragon.me.excellentDuels.ExcellentDuels;
 import dragon.me.excellentDuels.controllers.ArenaController;
 import dragon.me.excellentDuels.controllers.KitDataController;
+import dragon.me.excellentDuels.hooks.PlaceholderAPIHook;
 import dragon.me.excellentDuels.utils.ConfigProvider;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.entity.Player;
@@ -30,7 +31,7 @@ public interface ArenaCommandProvider {
                 String name = args[1].toLowerCase();
                 ArenaController.Arena arena = new ArenaController.Arena(name, List.of(), null, null, null, new java.util.ArrayList<>());
                 arenaController.saveArena(arena);
-                sendMessage(p, ConfigProvider.ARENA_CREATED, name);
+                sendMessage(p, PlaceholderAPIHook.format(p,ConfigProvider.ARENA_CREATED), name);
             }
 
             case "corner1", "corner2" -> {
@@ -40,10 +41,10 @@ public interface ArenaCommandProvider {
 
                 if (sub.equals("corner1")) {
                     arena.setCorner1(p.getLocation());
-                    sendMessage(p, ConfigProvider.CORNER1_SET, arena.getName());
+                    sendMessage(p, PlaceholderAPIHook.format(p,ConfigProvider.CORNER1_SET), arena.getName());
                 } else {
                     arena.setCorner2(p.getLocation());
-                    sendMessage(p, ConfigProvider.CORNER2_SET, arena.getName());
+                    sendMessage(p, PlaceholderAPIHook.format(p,ConfigProvider.CORNER2_SET), arena.getName());
                 }
 
                 saveArena(arena);
@@ -56,7 +57,7 @@ public interface ArenaCommandProvider {
 
                 arena.getSpawnPositions().add(p.getLocation());
                 saveArena(arena);
-                sendMessage(p, "<green>Added spawn point to arena %arena%", arena.getName());
+                sendMessage(p, PlaceholderAPIHook.format(p,ConfigProvider.ADD_SPAWN), arena.getName());
             }
 
             case "removespawn" -> {
@@ -68,18 +69,18 @@ public interface ArenaCommandProvider {
                 try {
                     index = Integer.parseInt(args[2]);
                 } catch (NumberFormatException e) {
-                    p.sendRichMessage("<red>Invalid number for spawn index.");
+                    sendMessage(p,PlaceholderAPIHook.format(p,ConfigProvider.INDEX_ERROR),arena.getName());
                     return;
                 }
 
                 if (index < 0 || index >= arena.getSpawnPositions().size()) {
-                    p.sendRichMessage("<red>Invalid spawn index.");
+                    sendMessage(p,PlaceholderAPIHook.format(p,ConfigProvider.INDEX_ERROR),arena.getName());
                     return;
                 }
 
                 arena.getSpawnPositions().remove(index);
                 saveArena(arena);
-                sendMessage(p, "<green>Removed spawn point from arena %arena%", arena.getName());
+                sendMessage(p, PlaceholderAPIHook.format(p,ConfigProvider.REMOVE_SPAWN.replace("%index%",String.valueOf(index))), arena.getName());
             }
 
             case "clearspawns" -> {
@@ -89,7 +90,7 @@ public interface ArenaCommandProvider {
 
                 arena.getSpawnPositions().clear();
                 saveArena(arena);
-                sendMessage(p, "<green>Cleared all spawn points from arena %arena%", arena.getName());
+                sendMessage(p, PlaceholderAPIHook.format(p,ConfigProvider.CLEAR_SPAWNS), arena.getName());
             }
 
             case "seticon" -> {
@@ -99,7 +100,7 @@ public interface ArenaCommandProvider {
 
                 ItemStack item = p.getInventory().getItemInMainHand();
                 if (item.getType().isAir()) {
-                    p.sendMessage("<red>Hold an item in your hand.");
+                    p.sendMessage("%prefix% <red> Hold an item in your hand.");
                     return;
                 }
 
@@ -115,7 +116,7 @@ public interface ArenaCommandProvider {
 
                 KitDataController.Kit kit = ExcellentDuels.getKitDataController().getKitByName(args[2]);
                 if (kit == null) {
-                    p.sendRichMessage(ConfigProvider.NO_SUCH_KIT);
+                    p.sendRichMessage(PlaceholderAPIHook.format(p,ConfigProvider.NO_SUCH_KIT));
                     return;
                 }
 
@@ -124,7 +125,7 @@ public interface ArenaCommandProvider {
                     saveArena(arena);
                 }
 
-                sendMessage(p, ConfigProvider.KIT_ADDED_TO_ARENA, arena.getName(), kit.getName());
+                sendMessage(p,PlaceholderAPIHook.format(p, ConfigProvider.KIT_ADDED_TO_ARENA),arena.getName(), kit.getName());
             }
 
             case "removekit" -> {
@@ -134,7 +135,7 @@ public interface ArenaCommandProvider {
 
                 arena.getAvailableKits().removeIf(k -> k.getName().equalsIgnoreCase(args[2]));
                 saveArena(arena);
-                sendMessage(p, ConfigProvider.KIT_REMOVED_FROM_ARENA, arena.getName(), args[2]);
+                sendMessage(p, PlaceholderAPIHook.format(p,ConfigProvider.KIT_REMOVED_FROM_ARENA), arena.getName(), args[2]);
             }
 
             default -> p.sendRichMessage(ConfigProvider.INCORRECT_USAGE);

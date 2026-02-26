@@ -1,28 +1,23 @@
 package dragon.me.excellentDuels.api.command;
 
 import dragon.me.excellentDuels.ExcellentDuels;
-import dragon.me.excellentDuels.api.abstractions.Match;
-import dragon.me.excellentDuels.api.abstractions.Team;
+import dragon.me.excellentDuels.api.models.Match;
+import dragon.me.excellentDuels.api.models.Team;
 import dragon.me.excellentDuels.controllers.ArenaController;
 import dragon.me.excellentDuels.controllers.GameController;
 import dragon.me.excellentDuels.controllers.InviteController;
 import dragon.me.excellentDuels.controllers.KitDataController;
 import dragon.me.excellentDuels.controllers.enums.GameState;
+import dragon.me.excellentDuels.hooks.PlaceholderAPIHook;
 import dragon.me.excellentDuels.utils.ConfigProvider;
-import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public interface AcceptDuelProvider  {
 
@@ -31,19 +26,19 @@ public interface AcceptDuelProvider  {
         if (!(source.getSender() instanceof Player p)) return;
 
         if (args.length < 1) {
-            p.sendRichMessage(ConfigProvider.INCORRECT_USAGE);
+            p.sendRichMessage(PlaceholderAPIHook.format(p,ConfigProvider.INCORRECT_USAGE));
             return;
         }
 
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
-            p.sendRichMessage(ConfigProvider.PLAYER_IS_OFFLINE);
+            p.sendRichMessage(PlaceholderAPIHook.format(p,ConfigProvider.PLAYER_IS_OFFLINE));
             return;
         }
 
         Optional<InviteController.Invite> inviteOpt = findInvite(target, p);
         if (inviteOpt.isEmpty()) {
-            p.sendRichMessage("You have no duel invite from " + target.getName() + "!");
+            p.sendRichMessage(PlaceholderAPIHook.format(p,ConfigProvider.NO_INVITES.replace("%player%",target.getName())));
             return;
         }
 

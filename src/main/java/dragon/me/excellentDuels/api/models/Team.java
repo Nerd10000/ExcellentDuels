@@ -1,4 +1,4 @@
-package dragon.me.excellentDuels.api.abstractions;
+package dragon.me.excellentDuels.api.models;
 
 import dragon.me.excellentDuels.api.command.AcceptDuelProvider;
 import lombok.Getter;

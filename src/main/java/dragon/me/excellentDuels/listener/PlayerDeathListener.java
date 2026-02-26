@@ -1,29 +1,25 @@
 package dragon.me.excellentDuels.listener;
 
 import dragon.me.excellentDuels.ExcellentDuels;
-import dragon.me.excellentDuels.api.abstractions.Match;
-import dragon.me.excellentDuels.api.abstractions.Team;
+import dragon.me.excellentDuels.api.models.Match;
+import dragon.me.excellentDuels.api.models.Team;
 import dragon.me.excellentDuels.controllers.ArenaController;
 import dragon.me.excellentDuels.controllers.GameController;
 import dragon.me.excellentDuels.controllers.InventoryController;
 import dragon.me.excellentDuels.controllers.enums.PlayerStatus;
+import dragon.me.excellentDuels.hooks.PlaceholderAPIHook;
 import dragon.me.excellentDuels.utils.ConfigProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
-import org.bukkit.GameEvent;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import javax.management.monitor.CounterMonitor;
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
-import java.util.List;
 import java.util.Optional;
 
 public class PlayerDeathListener implements Listener {
@@ -88,12 +84,12 @@ public class PlayerDeathListener implements Listener {
                                     Title.Times.times(Duration.ofSeconds(1), Duration.ofSeconds(3), Duration.ofSeconds(1))
                             ));
                             participant.sendRichMessage(
-                                    ConfigProvider.DUEL_VICTORY
+                                    PlaceholderAPIHook.format(participant,ConfigProvider.DUEL_VICTORY
                                             .replace("%winner_team%", "Your Team")
                                             .replace("%loser_team%",
                                                     losingTeam != null
                                                             ? losingTeam.getPlayers().get(0).getName() + "'s Team"
-                                                            : "Unknown Team")
+                                                            : "Unknown Team"))
                             );
 
                         } else {
@@ -102,7 +98,7 @@ public class PlayerDeathListener implements Listener {
                                     MiniMessage.miniMessage().deserialize(ConfigProvider.DEATH_SUBTITLE),
                                     Title.Times.times(Duration.ofSeconds(1), Duration.ofSeconds(3), Duration.ofSeconds(1))
                             ));
-                            participant.sendRichMessage(ConfigProvider.DUEL_DEFEAT.replace("%winner_team%", winningTeam.getPlayers().get(0).getName() + "'s Team"));
+                            participant.sendRichMessage(PlaceholderAPIHook.format(participant,ConfigProvider.DUEL_DEFEAT.replace("%winner_team%", winningTeam.getPlayers().get(0).getName() + "'s Team")));
                         }
                     }
                 }
@@ -148,7 +144,7 @@ public class PlayerDeathListener implements Listener {
             for (Team team : game.getTeams()) {
                 for (Player participant : team.getPlayers()) {
                     if (participant != loser) {
-                        participant.sendRichMessage(ConfigProvider.PLAYER_ELIMINATED.replace("%player%", loser.getName()));
+                        participant.sendRichMessage(PlaceholderAPIHook.format(loser,ConfigProvider.PLAYER_ELIMINATED.replace("%player%", loser.getName())));
                     }
                 }
             }

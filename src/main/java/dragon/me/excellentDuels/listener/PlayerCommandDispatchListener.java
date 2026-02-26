@@ -1,6 +1,7 @@
 package dragon.me.excellentDuels.listener;
 
 import dragon.me.excellentDuels.controllers.GameController;
+import dragon.me.excellentDuels.hooks.PlaceholderAPIHook;
 import dragon.me.excellentDuels.utils.ConfigProvider;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,7 +22,7 @@ public class PlayerCommandDispatchListener implements Listener {
             return;
         }
 
-        e.getPlayer().sendRichMessage(ConfigProvider.BLACKLISTED_COMMAND_WHERE_RAN);
+        e.getPlayer().sendRichMessage(PlaceholderAPIHook.format(e.getPlayer(), ConfigProvider.BLACKLISTED_COMMAND_WHERE_RAN));
         e.setCancelled(true);
     }
 }

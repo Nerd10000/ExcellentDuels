@@ -3,6 +3,8 @@ package dragon.me.excellentDuels;
 import dragon.me.excellentDuels.api.DuelsApi;
 import dragon.me.excellentDuels.commands.*;
 import dragon.me.excellentDuels.controllers.*;
+import dragon.me.excellentDuels.hooks.CombatLogXHook;
+import dragon.me.excellentDuels.hooks.placeholderapi.PlaceholderExpansion;
 import dragon.me.excellentDuels.listener.*;
 import dragon.me.excellentDuels.utils.ConfigProvider;
 import dragon.me.excellentDuels.utils.GeneralScheduler;
@@ -55,7 +57,15 @@ public final class ExcellentDuels extends JavaPlugin {
         }
 
         saveDefaultConfig();
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")){
 
+            this.getLogger().info("\u001B[33m  | Hooked into PlaceholderAPI!\u001B[0m");
+            new PlaceholderExpansion().register();
+        }
+        if (Bukkit.getPluginManager().isPluginEnabled("CombatLogX")){
+            this.getLogger().info("\u001B[33m  | Hooked into CombatLogX!\u001B[0m");
+            getServer().getPluginManager().registerEvents(new CombatLogXHook(),this);
+        }
         this.getLogger().info("\u001B[33m  | Loading Event listeners...Done!\u001B[0m");
         registerListeners();
         this.getLogger().info("\u001B[33m  | Loading MessageProvider... Done!\u001B[0m");

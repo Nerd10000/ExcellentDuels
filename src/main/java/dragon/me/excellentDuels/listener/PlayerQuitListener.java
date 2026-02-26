@@ -1,11 +1,9 @@
 package dragon.me.excellentDuels.listener;
 
 import dragon.me.excellentDuels.ExcellentDuels;
-import dragon.me.excellentDuels.api.abstractions.Match;
+import dragon.me.excellentDuels.api.models.Match;
 import dragon.me.excellentDuels.controllers.GameController;
-import dragon.me.excellentDuels.controllers.InventoryController;
 import dragon.me.excellentDuels.utils.ConfigProvider;
-import dragon.me.excellentDuels.utils.inventory.PersistentInventoryManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;

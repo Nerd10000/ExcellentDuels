@@ -1,7 +1,6 @@
 package dragon.me.excellentDuels.listener;
 
-import dragon.me.excellentDuels.ExcellentDuels;
-import dragon.me.excellentDuels.api.abstractions.Match;
+import dragon.me.excellentDuels.api.models.Match;
 import dragon.me.excellentDuels.controllers.GameController;
 import dragon.me.excellentDuels.controllers.enums.GameState;
 import org.bukkit.Location;

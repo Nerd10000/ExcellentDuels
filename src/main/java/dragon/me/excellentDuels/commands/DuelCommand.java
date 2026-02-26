@@ -30,9 +30,11 @@ public class DuelCommand implements BasicCommand, DuelCommandProvider {
 
     @Override
     public boolean canUse(@NotNull CommandSender sender) {
-        return BasicCommand.super.canUse(sender);
+        if (sender instanceof Player p){
+            return true;
+        }
+        return  false;
     }
-
     @Override
     public @Nullable String permission() {
         return BasicCommand.super.permission();

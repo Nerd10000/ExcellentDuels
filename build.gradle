@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id "xyz.jpenilla.run-paper" version "2.3.1"
     id 'maven-publish'
+    id("com.gradleup.shadow") version "9.3.0"
 }
 
 group = 'dragon.me'
@@ -14,13 +15,25 @@ dependencies {
 
     testCompileOnly("org.projectlombok:lombok:1.18.42")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.42")
-
+    compileOnly 'me.clip:placeholderapi:2.12.2'
+    compileOnly 'com.github.sirblobman.api:core:2.9-SNAPSHOT'
+    compileOnly 'com.github.sirblobman.combatlogx:api:11.6-SNAPSHOT'
 }
 
 tasks {
     runServer {
         minecraftVersion("1.21")
+        dependsOn shadowJar
+        pluginJars.from(tasks.shadowJar)
     }
+}
+
+shadowJar {
+    archiveClassifier.set("")
+}
+
+jar {
+    enabled = false
 }
 
 def targetJavaVersion = 21

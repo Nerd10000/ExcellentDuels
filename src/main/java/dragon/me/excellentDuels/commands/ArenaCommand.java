@@ -7,6 +7,7 @@ import dragon.me.excellentDuels.utils.ConfigProvider;
 import dragon.me.excellentDuels.controllers.KitDataController;
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +33,12 @@ public class ArenaCommand implements BasicCommand, ArenaCommandProvider {
     public void execute(@NotNull CommandSourceStack stack, @NotNull String[] args) {
         reimplement(stack,args);
     }
-
+    @Override
+    public boolean canUse(@NotNull CommandSender sender) {
+        if (sender instanceof Player p){
+            return true;
+        }
+        return  false;
+    }
 
 }
